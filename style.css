@@ -1,0 +1,11 @@
+body {
+    text-align: center;
+    margin: 15% 0 0;
+    font-family: tahoma;
+    font-size: 1.4em;
+    line-height: 1.5em;
+}
+
+div { margin: auto; }
+
+input#url { border: 1px solid #ccc; font-size: 1em; padding: 4px 6px; }

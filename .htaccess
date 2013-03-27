@@ -1,0 +1,2 @@
+# Directive AddDefaultCharset MUST BE in .htaccess !!!
+AddDefaultCharset utf-8
