@@ -24,7 +24,7 @@ function main () {
 
             /* // Это как-нибудь потом
             $c = curl_init();
-            curl_setopt($c, CURLOPT_URL, "http://www.example.com/");
+            curl_setopt($c, CURLOPT_URL, $q);
             curl_setopt($c, CURLOPT_FRESH_CONNECT, true);
             curl_setopt($c, CURLOPT_NOBODY, true);
             curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 5);
@@ -42,8 +42,12 @@ function main () {
         }
         return $return . '<br/><a href="?">Проверь другой сайт!</a>';
     }
-    return '<form onsubmit="return serverupal()">Что с сайтом <input id="url" type="text" value="http://example.com/"/>? ' .
-        'Неужели <a href="#" onclick="serverupal()" onkeyup="serverupal()">сервер упал</a>?<input type="submit" style="display:none"/></form>';
+    return
+        '<form onsubmit="return serverupal()">' .
+            'Что с сайтом <input id="url" type="text" placeholder="http://example.com/"/>? ' .
+            'Неужели <a href="#" onclick="serverupal()" onkeyup="serverupal()">сервер упал</a>?' .
+            '<input type="submit" style="display:none"/>' .
+        '</form>';
 }
 
 header ('Content-Type: text/html; charset=utf-8');
