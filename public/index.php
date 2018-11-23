@@ -1,26 +1,34 @@
 <?php
-function writelog ($url, $success) {
 
-    $fn = 'log.txt';
+/**
+ * Assuming this file is in ROOT_DIR/public folder
+ * @const string ROOT_DIR
+ */
+define(ROOT_DIR, dirname(__DIR__));
+
+function writelog($url, $success)
+{
+    $fn = ROOT_DIR . '/var/log/log.txt';
     $msg = date('Y-m-d H:i:s') . "\t" . $url . "\t" . ($success ? 'up' : 'down');
 
-    $f = fopen ($fn, 'ab');
-    fwrite ($f, $msg . "\r\n");
-    fclose ($f);
+    $f = fopen($fn, 'ab');
+    fwrite($f, $msg . "\r\n");
+    fclose($f);
 }
 
-
-function main () {
+function main()
+{
     $q = trim($_SERVER['QUERY_STRING']);
-    if (! empty ($q)) {
-        $q = preg_replace ('~^http://~i', '', $q);
-        if (! preg_match ('~^(([a-z\d\.\-]+)\.[a-z]{2,4}).*$~i', $q, $matches)) {
+    if (!empty($q)) {
+        $q = preg_replace('~^http://~i', '', $q);
+        if (!preg_match('~^(([a-z\d\.\-]+)\.[a-z]{2,4}).*$~i', $q, $matches)) {
+            // FIXME: Potential XSS here! Sanitize before outputting!
             $return = 'Что-то <a href="' . $q . '">' . $q . '</a> не слишком похоже на адрес сайта.';
         }
         else {
             $q = 'http://' . substr($matches[1], 0, 255) . '/';
             $f = @file_get_contents($q);
-            $success = ! empty($f);
+            $success = !empty($f);
 
             /* // Это как-нибудь потом
             $c = curl_init();
@@ -33,12 +41,13 @@ function main () {
             */
 
             if ($success) {
+                // FIXME: Potential XSS here! Sanitize before outputting!
                 $return = 'Да нет, сервер <a href="' . $q . '">' . $q . '</a> вполне себе работает.';
-            }
-            else {
+            } else {
+                // FIXME: Potential XSS here! Sanitize before outputting!
                 $return = 'Увы, да, сервер <a href="' . $q . '">' . $q . '</a> лежит в лёжку.';
             }
-            writelog ($q, $success);
+            writelog($q, $success);
         }
         return $return . '<br/><a href="?">Проверь другой сайт!</a>';
     }
@@ -50,7 +59,7 @@ function main () {
         '</form>';
 }
 
-header ('Content-Type: text/html; charset=utf-8');
+header('Content-Type: text/html; charset=utf-8');
 ?>
 <html>
     <head>
